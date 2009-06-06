@@ -1,0 +1,34 @@
+#!/bin/sh
+#Author:pengjianqing@sina.com
+#Date:20090607
+#description:used to gen the keystore
+#Filename:genkey.sh
+#USAGE:
+#Example:
+#./genkey.sh appname
+#
+#
+
+echo "========================================"
+APKFILE=`ls bin/ -l|grep apk|cut -d " " -f8`
+echo "APKFILE=${APKFILE}"
+echo "========================================"
+
+
+echo "Generage the keystore:"
+echo "keytool -genkey -v -keystore ${1}.keystore -alias ${1} -keyalg RSA -validity 10000"
+keytool -genkey -v -keystore ${1}.keystore -alias ${1} -keyalg RSA -validity 10000
+
+echo "show the MD5 of the keystore:"
+echo "keytool -list  -keystore ${1}.keystore"
+keytool -list  -keystore ${1}.keystore
+
+echo "Sign the apk:"
+echo "jarsigner -verbose -keystore ${1}.keystore bin/${APKFILE} ${1}"
+jarsigner -verbose -keystore ${1}.keystore bin/${APKFILE} ${1}
+
+#echo"Uninstall the apk"
+#adb uninstall com.pjq.googlemapsample
+
+#echo "Install the apk"
+#adb install bin/GooglemapSample.apk 
